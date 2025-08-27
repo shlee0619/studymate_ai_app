@@ -16,7 +16,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // 앱 시작 시 세션 확인만 여기서 호출 (OK)
     ref.read(authNotifierProvider.notifier).checkSession();
   }
 
@@ -29,7 +28,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ 리스너는 build 안에서 등록 (2.6 규칙)
     ref.listen(authNotifierProvider, (prev, next) {
       next.when(
         data: (user) {
@@ -37,9 +35,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         },
         error: (e, _) {
           if (mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('오류: $e')));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('오류: $e')));
           }
         },
         loading: () {},
@@ -94,3 +91,4 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 }
+

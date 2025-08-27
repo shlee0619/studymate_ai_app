@@ -7,13 +7,26 @@ import 'package:studymate_ai_app/features/auth/data/repositories/fake_auth_repos
 // Study
 import 'package:studymate_ai_app/features/study/domain/repositories/study_repository.dart';
 import 'package:studymate_ai_app/features/study/data/repositories/fake_study_repository.dart';
+import 'package:studymate_ai_app/features/study/data/repositories/local_study_repository.dart';
+
+// Chat
+import 'package:studymate_ai_app/features/chat/domain/repositories/chat_repository.dart';
+import 'package:studymate_ai_app/features/chat/data/repositories/fake_chat_repository.dart';
 
 /// Auth DI
+
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return FakeAuthRepository();
 });
 
 /// Study DI
 final studyRepositoryProvider = Provider<StudyRepository>((ref) {
-  return FakeStudyRepository();
+  // Switch between implementations as needed.
+  // return FakeStudyRepository();
+  return ref.watch(localStudyRepositoryProvider);
+});
+
+/// Chat DI
+final chatRepositoryProvider = Provider<ChatRepository>((ref) {
+  return FakeChatRepository();
 });

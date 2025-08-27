@@ -132,3 +132,4 @@ class _StudyDetailPageState extends ConsumerState<StudyDetailPage> {
     return '${d.year}-$m-$day';
   }
 }
+
