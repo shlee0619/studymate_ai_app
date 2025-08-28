@@ -6,7 +6,8 @@ import 'package:studymate_ai_app/features/auth/presentation/providers/auth_notif
 
 /// 로그인 이후 진입하는 홈 화면.
 /// - 상단에 사용자 인사말 표시
-/// - 우상단 로그아웃 버튼 (누르면 세션 종료 후 로그인 화면으로 이동)
+/// - 우상단 Study / Settings 이동
+/// - 우상단 로그아웃 버튼 (세션 종료 후 로그인 화면으로 이동)
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -18,7 +19,7 @@ class HomePage extends ConsumerWidget {
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(
-        appBar: AppBar(title: const Text('홈')),
+        appBar: AppBar(title: const Text('오류')),
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -35,12 +36,20 @@ class HomePage extends ConsumerWidget {
         ),
       ),
       data: (user) {
-        // 가드(AuthGate)를 사용한다면 이 분기에는 보통 null이 오지 않습니다.
+        // 가드를 쓰면 일반적으로 null이 오지 않지만, 안전하게 처리합니다.
         final userName = user?.name ?? '사용자';
         return Scaffold(
           appBar: AppBar(
             title: Text('안녕하세요, $userName'),
             actions: [
+              TextButton(
+                onPressed: () => context.go('/study'),
+                child: const Text('Study'),
+              ),
+              TextButton(
+                onPressed: () => context.go('/settings'),
+                child: const Text('Settings'),
+              ),
               IconButton(
                 tooltip: '로그아웃',
                 icon: const Icon(Icons.logout),

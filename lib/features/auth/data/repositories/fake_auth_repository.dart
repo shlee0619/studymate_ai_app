@@ -1,13 +1,13 @@
 import 'dart:async';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
+import 'package:studymate_ai_app/features/auth/domain/entities/user.dart';
+import 'package:studymate_ai_app/features/auth/domain/repositories/auth_repository.dart';
 
 class FakeAuthRepository implements AuthRepository {
   User? _current;
+
   @override
   Future<User> login({required String email, required String password}) async {
-    await Future<void>.delayed(const Duration(milliseconds: 800));
-    // 아주 단순한 데모용 규칙
+    await Future<void>.delayed(const Duration(milliseconds: 600));
     if (email.isEmpty || password.isEmpty) {
       throw Exception('이메일/비밀번호를 입력하세요.');
     }
@@ -16,11 +16,14 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> logout() async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
-    _current = null;
+  Future<User?> me() async {
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    return _current;
   }
 
   @override
-  Future<User?> me() async => _current;
+  Future<void> logout() async {
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    _current = null;
+  }
 }

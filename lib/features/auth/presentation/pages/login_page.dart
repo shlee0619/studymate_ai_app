@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/auth_notifier.dart';
+import 'package:go_router/go_router.dart';
+import 'package:studymate_ai_app/features/auth/presentation/providers/auth_notifier.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -13,8 +14,40 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _pwd = TextEditingController(text: 'password');
 
   @override
+  void initState() {
+    super.initState();
+    // 앱 시작 시 세션 확인만 여기서 호출 (OK)
+    ref.read(authNotifierProvider.notifier).checkSession();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _pwd.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // ✅ 리스너는 build 안에서 등록 (2.6 규칙)
+    ref.listen(authNotifierProvider, (prev, next) {
+      next.when(
+        data: (user) {
+          if (user != null && mounted) context.go('/home');
+        },
+        error: (e, _) {
+          if (mounted) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('오류: $e')));
+          }
+        },
+        loading: () {},
+      );
+    });
+
     final authState = ref.watch(authNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('로그인')),
       body: Padding(
@@ -34,7 +67,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
             const SizedBox(height: 24),
             authState.when(
-              data: (user) => ElevatedButton(
+              data: (_) => ElevatedButton(
                 onPressed: () => ref
                     .read(authNotifierProvider.notifier)
                     .login(_email.text, _pwd.text),
