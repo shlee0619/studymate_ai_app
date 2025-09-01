@@ -17,18 +17,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void initState() {
     super.initState();
     ref.read(authNotifierProvider.notifier).checkSession();
-  }
-
-  @override
-  void dispose() {
-    _email.dispose();
-    _pwd.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    ref.listen(authNotifierProvider, (prev, next) {
+    ref.listen<AsyncValue>(authNotifierProvider, (prev, next) {
       next.when(
         data: (user) {
           if (user != null && mounted) context.go('/home');
@@ -42,7 +31,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         loading: () {},
       );
     });
+  }
 
+  @override
+  void dispose() {
+    _email.dispose();
+    _pwd.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authNotifierProvider);
 
     return Scaffold(

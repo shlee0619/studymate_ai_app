@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:studymate_ai_app/features/study/domain/entities/study_item.dart';
 import 'package:studymate_ai_app/features/study/domain/repositories/study_repository.dart';
 
@@ -11,7 +12,7 @@ class FakeStudyRepository implements StudyRepository {
     _items.addAll([
       StudyItem(
         id: 's${_counter++}',
-        title: '영어 독해',
+        title: '토익 어휘',
         progress: 0.25,
         lastActivity: now.subtract(const Duration(days: 1)),
         tags: const ['영어', '리딩'],
@@ -25,7 +26,7 @@ class FakeStudyRepository implements StudyRepository {
       ),
       StudyItem(
         id: 's${_counter++}',
-        title: '한국사 근현대',
+        title: '한국사 근현대사',
         progress: 0.9,
         lastActivity: now.subtract(const Duration(days: 3)),
         tags: const ['한국사', '암기'],
@@ -86,3 +87,4 @@ class FakeStudyRepository implements StudyRepository {
     _items.removeWhere((e) => e.id == id);
   }
 }
+
