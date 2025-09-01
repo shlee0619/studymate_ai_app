@@ -33,4 +33,7 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<void> logout() async {
     await _auth.signOut();
   }
+
+  @override
+  Stream<ent.User?> authStateChanges() => _auth.authStateChanges().map((u) => u == null ? null : _map(u));
 }
