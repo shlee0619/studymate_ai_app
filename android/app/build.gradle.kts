@@ -42,3 +42,8 @@ android {
 flutter {
     source = "../.."
 }
+
+// Apply Google Services plugin only if google-services.json exists to avoid build failures
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
