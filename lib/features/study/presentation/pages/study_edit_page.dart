@@ -34,7 +34,7 @@ class _StudyEditPageState extends ConsumerState<StudyEditPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(studyListProvider);
 
-    // 편집 모드면 기존 값 주입
+    // 편집 모드: 기존 값 주입
     StudyItem? existing;
     if (widget.id != null) {
       final items = state.value;
@@ -70,11 +70,11 @@ class _StudyEditPageState extends ConsumerState<StudyEditPage> {
               controller: _title,
               decoration: const InputDecoration(
                 labelText: '제목',
-                hintText: '예) 영어 독해',
+                hintText: '예: 토익 어휘',
               ),
             ),
             const SizedBox(height: 16),
-            Text('진행도: ${(_progress * 100).round()}%'),
+            Text('진행도 ${(_progress * 100).round()}%'),
             Slider(
               value: _progress,
               onChanged: (v) => setState(() => _progress = v),
@@ -83,8 +83,8 @@ class _StudyEditPageState extends ConsumerState<StudyEditPage> {
             TextField(
               controller: _tags,
               decoration: const InputDecoration(
-                labelText: '태그(쉼표로 구분)',
-                hintText: '예) 영어, 리딩',
+                labelText: '태그(쉼표 구분)',
+                hintText: '예: 토익, 리딩',
               ),
             ),
             const SizedBox(height: 24),
@@ -92,9 +92,9 @@ class _StudyEditPageState extends ConsumerState<StudyEditPage> {
               onPressed: () async {
                 final title = _title.text.trim();
                 if (title.isEmpty) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(const SnackBar(content: Text('제목을 입력하세요.')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('제목을 입력하세요')),
+                  );
                   return;
                 }
                 final tags = _tags.text
@@ -130,3 +130,4 @@ class _StudyEditPageState extends ConsumerState<StudyEditPage> {
     );
   }
 }
+

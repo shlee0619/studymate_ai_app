@@ -19,10 +19,9 @@ class _StudyListPageState extends ConsumerState<StudyListPage> {
   void initState() {
     super.initState();
     _query = TextEditingController();
-    // 초기 로드
+    // 초기 로드 및 저장된 필터 반영
     Future.microtask(() async {
       await ref.read(studyListProvider.notifier).load();
-      // 저장된 쿼리를 입력 상자에 반영
       final q = ref.read(studyFilterProvider).query;
       _query.text = q;
     });
@@ -36,11 +35,11 @@ class _StudyListPageState extends ConsumerState<StudyListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final rawState = ref.watch(studyListProvider); // 원본 목록(태그 목록 생성용)
+    final rawState = ref.watch(studyListProvider); // 원본 목록
     final filtered = ref.watch(filteredStudyListProvider); // 필터 적용 결과
     final filter = ref.watch(studyFilterProvider);
 
-    // 사용 가능한 태그들(원본 기준으로 모음)
+    // 사용 가능한 태그 모음
     final Set<String> availableTags = {
       for (final s in rawState.value ?? const <StudyItem>[]) ...s.tags,
     };
@@ -49,7 +48,7 @@ class _StudyListPageState extends ConsumerState<StudyListPage> {
       appBar: AppBar(title: const Text('학습 목록')),
       body: Column(
         children: [
-          // ====== 필터 바 ======
+          // ====== 필터 영역 ======
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
             child: Row(
@@ -89,15 +88,15 @@ class _StudyListPageState extends ConsumerState<StudyListPage> {
                   items: const [
                     DropdownMenuItem(
                       value: StudySortBy.recent,
-                      child: Text('최신순'),
+                      child: Text('최신'),
                     ),
                     DropdownMenuItem(
                       value: StudySortBy.progressDesc,
-                      child: Text('진행도 높은순'),
+                      child: Text('진행도 높은 순'),
                     ),
                     DropdownMenuItem(
                       value: StudySortBy.titleAsc,
-                      child: Text('제목(ㄱ-ㅎ)'),
+                      child: Text('제목(가나다)'),
                     ),
                   ],
                 ),
@@ -159,8 +158,8 @@ class _StudyListPageState extends ConsumerState<StudyListPage> {
                 onRefresh: () => ref.read(studyListProvider.notifier).refresh(),
                 child: items.isEmpty
                     ? const ListTile(
-                        title: Text('항목이 없습니다.'),
-                        subtitle: Text('우측 하단에서 추가해 보세요.'),
+                        title: Text('데이터가 없습니다.'),
+                        subtitle: Text('오른쪽 하단에서 추가해 보세요.'),
                       )
                     : ListView.separated(
                         padding: const EdgeInsets.all(12),
@@ -199,7 +198,8 @@ class _StudyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () => context.go('/study/${item.id}'),
+        onTap: () => context.go('/study/${item.id}')
+        ,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -231,3 +231,4 @@ class _StudyCard extends StatelessWidget {
     );
   }
 }
+

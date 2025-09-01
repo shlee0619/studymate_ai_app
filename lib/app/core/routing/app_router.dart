@@ -9,6 +9,7 @@ import 'package:studymate_ai_app/features/settings/presentation/pages/settings_p
 import 'package:studymate_ai_app/features/study/presentation/pages/study_list_page.dart';
 import 'package:studymate_ai_app/features/study/presentation/pages/study_detail_page.dart';
 import 'package:studymate_ai_app/features/study/presentation/pages/study_edit_page.dart';
+import 'package:studymate_ai_app/features/chat/presentation/pages/chat_page.dart';
 
 // state
 import 'package:studymate_ai_app/features/auth/presentation/providers/auth_notifier.dart';
@@ -31,6 +32,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/settings',
         name: 'settings',
         builder: (context, state) => const _AuthGate(child: SettingsPage()),
+      ),
+      GoRoute(
+        path: '/chat',
+        name: 'chat',
+        builder: (context, state) => const _AuthGate(child: ChatPage()),
       ),
       GoRoute(
         path: '/study',

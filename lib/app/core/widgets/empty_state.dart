@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class EmptyState extends StatelessWidget {
-  const EmptyState({super.key, this.message = '항목이 없습니다.'});
+  const EmptyState({super.key, this.message = '데이터가 없습니다.'});
   final String message;
 
   @override
@@ -12,3 +12,4 @@ class EmptyState extends StatelessWidget {
     );
   }
 }
+
