@@ -39,25 +39,9 @@ class LocalStudyRepository implements StudyRepository {
 
   String _newId() => DateTime.now().microsecondsSinceEpoch.toString();
 
-  Map<String, dynamic> _toMap(StudyItem e) => {
-    'id': e.id,
-    'title': e.title,
-    'progress': e.progress, // double
-    'tags': e.tags, // List<String>
-    'lastActivity': e.lastActivity.toIso8601String(),
-  };
+  Map<String, dynamic> _toMap(StudyItem e) => e.toJson();
 
-  StudyItem _fromMap(Map<String, dynamic> m) => StudyItem(
-    id: m['id'] as String,
-    title: m['title'] as String,
-    progress: (m['progress'] as num).toDouble(),
-    tags:
-        (m['tags'] as List?)
-            ?.map((e) => e.toString())
-            .toList(growable: false) ??
-        const <String>[],
-    lastActivity: DateTime.parse(m['lastActivity'] as String),
-  );
+  StudyItem _fromMap(Map<String, dynamic> m) => StudyItem.fromJson(m);
 
   // ---------------------------
   // 인터페이스 구현

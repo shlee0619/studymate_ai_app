@@ -49,6 +49,10 @@ class HomePage extends ConsumerWidget {
                 child: const Text('Chat'),
               ),
               TextButton(
+                onPressed: () => context.go('/stats'),
+                child: const Text('Stats'),
+              ),
+              TextButton(
                 onPressed: () => context.go('/settings'),
                 child: const Text('Settings'),
               ),
@@ -73,4 +77,3 @@ class HomePage extends ConsumerWidget {
     );
   }
 }
-
