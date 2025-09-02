@@ -9,30 +9,43 @@ class ChatController extends AsyncNotifier<List<ChatMessage>> {
 
   @override
   FutureOr<List<ChatMessage>> build() async {
-    final repo = ref.read(chatRepositoryProvider);
+    final history = ref.read(chatHistoryRepositoryProvider);
     final completer = Completer<List<ChatMessage>>();
-    _sub = repo.watch().listen((data) {
-      // First event completes the build
+    _sub = history.watch().listen((data) {
       if (!completer.isCompleted) completer.complete(data);
       state = AsyncData(data);
-    });
+    }, onError: (e, st) => state = AsyncError(e, st));
     ref.onDispose(() => _sub?.cancel());
     return completer.future;
   }
 
   Future<void> send(String text) async {
-    if (text.trim().isEmpty) return;
-    final repo = ref.read(chatRepositoryProvider);
-    await repo.sendUserMessage(text);
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return;
+    final history = ref.read(chatHistoryRepositoryProvider);
+    final ai = ref.read(chatAiServiceProvider);
+    final now = DateTime.now();
+    await history.add(ChatMessage(
+      id: now.microsecondsSinceEpoch.toString(),
+      role: ChatRole.user,
+      text: trimmed,
+      createdAt: now,
+    ));
+    final reply = await ai.reply(trimmed);
+    await history.add(ChatMessage(
+      id: (now.microsecondsSinceEpoch + 1).toString(),
+      role: ChatRole.assistant,
+      text: reply,
+      createdAt: DateTime.now(),
+    ));
   }
 
   Future<void> clear() async {
-    final repo = ref.read(chatRepositoryProvider);
-    await repo.clear();
+    final history = ref.read(chatHistoryRepositoryProvider);
+    await history.clear();
   }
 }
 
 final chatControllerProvider = AsyncNotifierProvider<ChatController, List<ChatMessage>>(
   ChatController.new,
 );
-

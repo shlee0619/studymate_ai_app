@@ -72,9 +72,9 @@ class FakeStudyRepository implements StudyRepository {
     final now = DateTime.now();
     final cur = _items[idx];
     final updated = cur.copyWith(
-      title: title,
-      progress: progress?.clamp(0.0, 1.0).toDouble(),
-      tags: tags,
+      title: title ?? cur.title,
+      progress: (progress ?? cur.progress).clamp(0.0, 1.0).toDouble(),
+      tags: tags ?? cur.tags,
       lastActivity: now,
     );
     _items[idx] = updated;
@@ -87,4 +87,3 @@ class FakeStudyRepository implements StudyRepository {
     _items.removeWhere((e) => e.id == id);
   }
 }
-

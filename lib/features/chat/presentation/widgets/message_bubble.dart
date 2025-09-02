@@ -9,9 +9,8 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final isUser = message.role == ChatRole.user;
     final align = isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start;
-    final bg = isUser
-        ? Theme.of(context).colorScheme.primaryContainer
-        : Theme.of(context).colorScheme.surfaceVariant;
+    final colors = Theme.of(context).colorScheme;
+    final bg = isUser ? colors.primaryContainer : colors.surfaceContainerHighest;
     final fg = Theme.of(context).colorScheme.onSurface;
     return Column(
       crossAxisAlignment: align,
@@ -29,4 +28,3 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
-
